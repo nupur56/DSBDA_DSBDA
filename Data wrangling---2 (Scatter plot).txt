@@ -1,0 +1,46 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+
+df=pd.read_csv(r"C:\Users\HP\Downloads\AcademicPerformance_New.csv")
+df
+
+df.isnull().sum()
+
+df['AI'].fillna(df['AI'].mean())
+
+df['WT'].fillna(df['WT'].mode())
+
+df.fillna(0)
+
+numeric_cols = df.select_dtypes(include='number').columns
+def detect_outliers_iqr(data):
+    Q1 = data.quantile(0.25)
+    Q3 = data.quantile(0.75)
+    IQR = Q3 - Q1
+    outlier_condition = (data < (Q1 - 1.5 * IQR)) | (data > (Q3 + 1.5 * IQR))
+    return outlier_condition, Q1, Q3
+
+for col in numeric_cols:
+    outliers, Q1, Q3 = detect_outliers_iqr(df[col])
+    print(f"\nColumn: {col}")
+    print(f"Q1: {Q1}, Q3: {Q3}")
+    print("Outliers found at:\n", df[col][outliers])
+    df = df[~outliers]#keeps only non outlier rows
+
+for col in numeric_cols:
+    avg = df[col].mean()
+    max_val = df[col].max()
+    print(f"{col}-->Average is: {avg}")
+    print(f"{col}-->Maximum value is: {max_val}")
+
+plt.scatter(df['DSBDA'], df['WT'], color='blue')
+plt.xlabel("DSBDA")
+plt.ylabel("WT")
+plt.title("DSBDA vs WT Performance")
+plt.grid(True)
+plt.show()
+
+

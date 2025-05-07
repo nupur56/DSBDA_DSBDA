@@ -1,0 +1,40 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+df=pd.read_csv(r"C:\Users\HP\Downloads\Employee_2.csv")
+print(df)
+
+df[['Age', 'Salary']].agg(['mean', 'median','min'])
+
+df.groupby('Age')['Salary'].agg('mean','median','min')
+
+def category(age):
+    if age < 30:
+        return 'Young'
+    elif age < 50:
+        return 'Middle'
+    else:
+        return 'Old'
+df['Age_function'] = df['Age'].apply(category)
+
+df['Age_group'] = df['Age_function'].map({'Young': 1, 'Middle': 2, 'Old': 3})
+
+print(df[['Age', 'Age_function', 'Age_group']])
+
+
+df['PaymentTier'].value_counts()
+
+
+plt.figure(figsize=(8,4))
+plt.bar(df['Age'],df['Salary'],color="Red")
+plt.xlabel('Age')
+plt.ylabel('Salary')
+plt.title("Visualisation: ")
+plt.show()
+
+df['Salary'].plot(kind='hist', title='Salary Distribution')
+plt.xlabel('Salary')
+plt.show()

@@ -1,0 +1,25 @@
+import pandas as pd
+import numpy as np 
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+
+#load dataset
+titanic=sns.load_dataset('titanic')
+titanic.head()
+
+print(titanic.head())
+
+titanic.dtypes
+
+titanic.isnull().sum()
+
+titanic['age'].fillna(titanic['age'].mean())
+titanic['deck']=titanic['deck'].astype('object').fillna('Unknown')
+titanic['embark_town']=titanic['embark_town'].fillna('Unknown')
+
+sns.histplot(data=titanic,x='fare',kde=False,bins=30,color='magenta')
+plt.title("Fare distribution with frequency:",fontsize=20)
+plt.xlabel('fare',fontsize=14)
+plt.ylabel('Number of Passengers',fontsize=14)
+plt.show()

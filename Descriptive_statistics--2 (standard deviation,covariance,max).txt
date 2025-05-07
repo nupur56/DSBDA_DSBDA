@@ -1,0 +1,19 @@
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+
+df=pd.read_csv(r"C:\Users\HP\Downloads\Employee_2.csv")
+print(df)
+
+df[['Age','Salary']].agg(['max','std'])
+
+df[['Age','Salary']].cov()
+
+df.groupby('Age')['Salary'].agg(['mean','max','std'])
+
+df['PaymentTier'].value_counts()
+
+df['Age'].plot(kind='box',title='Age Boxplot')
+plt.show()

@@ -1,0 +1,26 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv(r"C:\Users\HP\Downloads\3_employees.csv")
+print(df)
+display_statistical_info=df.describe(include='all')
+print(display_statistical_info)
+print(df.head())
+print(f"dataframe has {df.shape[0]} rows and {df.shape[1]} columns")
+df.shape
+df.dtypes
+df['SALARY']=df['SALARY'].astype('float')
+print(df.dtypes)
+df['SALARY'] = df['SALARY'].fillna(df['SALARY'].median())
+print(df)
+from scipy.stats import zscore
+df['Normalized_salary']=(df['SALARY']-df['SALARY'].min()/df['SALARY'].max()-df['SALARY'].min())
+
+plt.figure(figsize=(8,4))
+sns.boxplot(x=df['Normalized_salary'])
+plt.title('Min-max Normalisation')
+plt.show()
+
+df_encoded=pd.get_dummies(df,columns=['DEPARTMENT_ID','EMAIL'], drop_first=True)
+print(df_encoded.head())

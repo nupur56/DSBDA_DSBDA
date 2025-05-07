@@ -1,0 +1,113 @@
+import nltk
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.corpus import stopwords
+import pandas as pd
+import numpy as np
+
+# Download necessary NLTK data
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# Tokenization example
+text = "Hello Everyone, How are you? Now, we will see practical number 07."
+print(word_tokenize(text))
+
+# Another tokenization example
+s = "We learn C, C++ and Python Language"
+tokens = word_tokenize(s)
+print(tokens)
+
+# Porter Stemming examples
+porter = PorterStemmer()
+print(porter.stem("work"))
+print(porter.stem("working"))
+print(porter.stem("works"))
+print(porter.stem("worked"))
+print(porter.stem("Communication"))
+print(porter.stem("Dancing"))
+print(porter.stem("Sing"))
+print(porter.stem("Playing"))
+print(porter.stem("Sings"))
+print(porter.stem("played"))
+print(porter.stem("Hardworking"))
+
+# Lemmatization
+lemmatizer = WordNetLemmatizer()
+print(lemmatizer.lemmatize("Communication", 'v'))
+print(lemmatizer.lemmatize("workers"))
+print(lemmatizer.lemmatize("beeches"))
+
+text2 = "I am student of Computer engineering Department"
+text2 = text2.lower()
+result = word_tokenize(text2)
+print(result)
+
+# Stopwords removal
+stop_words = set(stopwords.words("english"))
+filtered_words = [word for word in result if word not in stop_words]
+print(filtered_words)
+
+# Sentence tokenization
+sentences = sent_tokenize(text)
+print(sentences)
+
+# Lemmatization on tokenized sentence
+text3 = "Let’s lemmatize a simple sentence. We first tokenize the sentence into words using nltk."
+word_list = word_tokenize(text3)
+print(word_list)
+
+# Word set creation from corpus
+corpus = [
+    'data science is one of the most important fields of science',
+    'this is one of the best data science courses',
+    'data scientists analyze data'
+]
+words_set = set()
+for doc in corpus:
+    words = doc.split()
+    words_set.update(words)
+print('Number of words in the corpus:', len(words_set))
+print('The words in the corpus:\n', words_set)
+
+# TF calculation
+corpus = [
+    "we love python and data",
+    "python is great for data science",
+    "data science loves python"
+]
+
+words_set = set(" ".join(corpus).split())
+n_docs = len(corpus)
+n_words_set = len(words_set)
+
+df_tf = pd.DataFrame(np.zeros((n_docs, n_words_set)), columns=list(words_set))
+
+# Compute TF
+for i in range(n_docs):
+    words = corpus[i].split()
+    for w in words:
+        df_tf.loc[i, w] += 1 / len(words)
+
+print("\nTF DataFrame:")
+print(df_tf)
+
+# Compute IDF
+idf = {}
+for w in words_set:
+    k = sum(1 for doc in corpus if w in doc.split())
+    idf[w] = np.log10(n_docs / k)
+
+print("\nIDF values:")
+for w in words_set:
+    print(f'{w:>15}: {idf[w]:>10.4f}')
+
+# Compute TF-IDF
+df_tf_idf = df_tf.copy()
+for w in words_set:
+    for i in range(n_docs):
+        df_tf_idf.loc[i, w] *= idf[w]
+
+print("\nTF-IDF DataFrame:")
+print(df_tf_idf)

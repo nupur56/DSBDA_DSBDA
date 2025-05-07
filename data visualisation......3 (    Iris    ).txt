@@ -1,0 +1,32 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df=sns.load_dataset('iris')
+
+df.head()
+
+sns.histplot(data=df,x='sepal_length',color='blue')
+plt.title("Sepal length")
+plt.show()
+sns.histplot(data=df,x='sepal_width',color='violet')
+plt.title("Sepal Width")
+plt.show()
+sns.histplot(data=df,x='petal_width',color='beige')
+plt.title("Petal Width")
+plt.show()
+
+df.hist(figsize=(10,8),color='orange',edgecolor='black')
+plt.suptitle("Histograms")
+plt.show()
+
+df.plot(kind='box',figsize=(10,8),subplots=True,color='magenta',layout=(2,2))
+plt.suptitle('Boxplots: ')
+plt.tight_layout()
+plt.show()
+
+sns.boxplot(data=df,x='species',y='sepal_length',color='red')
+plt.figure(figsize=(20,15))
+plt.title("Boxplot of sepal length:")
+plt.show()

@@ -1,0 +1,54 @@
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
+
+# Step 1: Dataset
+data = {
+    'STUDY_HOURS': [29, 15, 33, 48, 39],
+    'PASS_FAIL': [0, 0, 1, 1, 1]
+}
+
+df = pd.DataFrame(data)
+df
+
+X = df[['STUDY_HOURS']]  # Feature
+y = df['PASS_FAIL']      # Target
+
+# Step 2: Train logistic regression model
+model = LogisticRegression()
+model.fit(X, y)
+
+# Predict for students who studied 25 and 42 hours
+hours = np.array([[25], [42]])
+predictions = model.predict(hours)
+probabilities = model.predict_proba(hours)
+
+print("Predictions:", predictions)
+print("Probabilities:", probabilities)
+
+
+# Predict on training data
+y_pred = model.predict(X)
+
+# Confusion matrix
+cm = confusion_matrix(y, y_pred)
+TP = cm[1, 1]
+FP = cm[0, 1]
+TN = cm[0, 0]
+FN = cm[1, 0]
+
+# Metrics
+accuracy = accuracy_score(y, y_pred)
+error_rate = 1 - accuracy
+precision = precision_score(y, y_pred)
+recall = recall_score(y, y_pred)
+
+# Display
+print("Confusion Matrix:")
+print(cm)
+print(f"TP: {TP}, FP: {FP}, TN: {TN}, FN: {FN}")
+print(f"Accuracy: {accuracy:.2f}")
+print(f"Error Rate: {error_rate:.2f}")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")

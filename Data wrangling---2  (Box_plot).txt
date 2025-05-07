@@ -1,0 +1,50 @@
+DATA wrangling 2--part 1
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from scipy import stats
+
+df=pd.read_csv(r"C:\Users\HP\Downloads\AcademicPerformance_New.csv")
+df
+
+df.isnull().sum()
+
+df['AI'].fillna(df['AI'].mean())
+
+df['WT'].fillna(df['WT'].mode())
+
+df.fillna(df.mean(numeric_only=True), inplace=True)
+for col in df.select_dtypes(include='object').columns:
+    df[col].fillna(df[col].mode()[0], inplace=True)
+
+df
+
+numeric_cols = df.select_dtypes(include=[np.number]).columns
+z_scores = np.abs(stats.zscore(df[numeric_cols]))
+
+outliers = (z_scores > 3)
+print("Outliers found:\n", outliers.any(axis=0))
+
+outlier_rows = df[(z_scores > 3).any(axis=1)]
+print("Outlier rows:\n", outlier_rows)
+
+df_cleaned = df[(z_scores < 3).all(axis=1)]
+
+df
+
+bins=[0,25,75,100]
+labels=['Low','Medium','High']
+df['cleaned_DSBDA_score']=pd.cut(df_cleaned['DSBDA'],bins=bins,labels=labels)
+
+df
+
+plt.figure(figsize=(8,4))
+plt.title("DSBDA_score")
+sns.boxplot(x='DSBDA',data=df)
+plt.show()
+
+plt.figure(figsize=(8,8))
+plt.title("DSBDA_score")
+sns.boxplot(x='cleaned_DSBDA_score',data=df)
+plt.show()

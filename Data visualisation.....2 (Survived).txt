@@ -1,0 +1,25 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy import stats
+import seaborn as sns
+
+titanic=sns.load_dataset('titanic')
+
+titanic.head()
+
+titanic.isnull().sum()
+
+titanic.dropna()
+
+titanic['age']=titanic['age'].fillna(titanic['age'].mean())
+
+titanic.info()
+
+sns.boxplot(data=titanic, x='sex', y='age', hue='survived')
+plt.title("Survived rate based on gender",fontsize=20)
+plt.xlabel("Gender",fontsize=14)
+plt.ylabel("Age",fontsize=14)
+plt.show()
+
+# sns.boxplot(x='sex', y='age', data=titanic, hue='survived')
